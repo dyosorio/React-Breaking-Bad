@@ -2,18 +2,20 @@
  import './App.css';
  import Header from './components/ui/Header'
  import CharacterGrid from './components/characters/CharacterGrid'
+ import Search from './components/ui/Search'
 
 const App = () => {
   const [items, setItems] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
+  const [query, setQuery] = useState('');
   const [hasError, setError] = useState(false);
 
   useEffect(() => {
     const fetchItems = async () => {
-            fetch(`https://www.breakingbadapi.com/api/characters`)
+            fetch(`https://www.breakingbadapi.com/api/characters?name=${query}`) 
             .then(res => res.json())
             .then(data => {
-            console.log(data)
+            //console.log(data)
             setItems(data)
             setIsLoading(false)
         })
@@ -21,12 +23,13 @@ const App = () => {
             setError(true);
         })
     }
-    fetchItems()
-  }, [])
+    fetchItems() 
+  }, [query])
 
   return (
-    <div className="container">
+    <div className="container"> 
       <Header /> 
+      <Search getQuery={(q) => setQuery(q)} /> 
       <CharacterGrid isLoading={isLoading} items={items} />
     </div>
   );
